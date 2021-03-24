@@ -62,5 +62,3 @@ def write(target, name, file):
     file.write(string)
     file.close()
     
-read("myfile.txt")
-print(sectionlist)
