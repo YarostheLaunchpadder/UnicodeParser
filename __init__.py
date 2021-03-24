@@ -1,19 +1,13 @@
 import codecs
 
-file = ""
-sections = []
-sectiondict = {}
-sectionnames = []
-
-
 def read(path):
     global file
     file = codecs.open(path, "r", "utf-8").read()
 
-    global sections
+    global sectionlist
     global sectiondict
     global sectionnames
-    sections = []
+    sectionlist = []
     sectionnames = []
     linelist = file.split("\n")
     while '' in linelist:
@@ -22,7 +16,7 @@ def read(path):
     for line in linelist:
         if "[" in line and "]" in line:
             try:
-                sections.append(sectiondict)
+                sectionlist.append(sectiondict)
 
             except:
                 pass
@@ -36,12 +30,14 @@ def read(path):
 
             sectiondict[line.split('=')[0]] = line.split('=')[1]
 
-    sections.append(sectiondict)
+    sectionlist.append(sectiondict)
 
+def sections():
+    return sectionnames
 
 def get(section, variable=0):
     try:
-        return sections[sectionnames.index(section)][variable]
+        return sectionlist[sectionnames.index(section)][variable]
 
     except NameError:
         raise (Exception("No file loaded in memory. Use read() to read file"))
@@ -66,3 +62,5 @@ def write(target, name, file):
     file.write(string)
     file.close()
     
+read("myfile.txt")
+print(sectionlist)
