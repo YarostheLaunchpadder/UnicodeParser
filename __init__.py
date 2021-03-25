@@ -1,9 +1,9 @@
 import codecs
 
+
 def read(path):
     global file
     file = codecs.open(path, "r", "utf-8").read()
-
     global sectionlist
     global sectiondict
     global sectionnames
@@ -13,8 +13,11 @@ def read(path):
     while '' in linelist:
         linelist.remove('')
 
+    while ' ' in linelist:
+        linelist.remove(' ')
+
     for line in linelist:
-        if "[" in line and "]" in line:
+        if "[" in line and "]" in line and not "=" in line:
             try:
                 sectionlist.append(sectiondict)
 
@@ -27,13 +30,28 @@ def read(path):
             line = line.replace(" = ", "=")
             line = line.replace("= ", "=")
             line = line.replace(" =", "=")
-
             sectiondict[line.split('=')[0]] = line.split('=')[1]
 
-    sectionlist.append(sectiondict)
+    try:
+        sectionlist.append(sectiondict)
+    except:
+        pass
+
+
+def items(section):
+    return sectionlist[sectionnames.index(section)]
+
 
 def sections():
     return sectionnames
+
+
+def has_section(section):
+    if section in sectionnames:
+        return True
+    else:
+        return False
+
 
 def get(section, variable=0):
     try:
@@ -42,7 +60,8 @@ def get(section, variable=0):
     except NameError:
         raise (Exception("No file loaded in memory. Use read() to read file"))
 
-    except KeyError:
+    except KeyError as e:
+        print(e)
         raise (Exception("Variable does not exist"))
 
 
@@ -56,9 +75,8 @@ def write(target, name, file):
     string += "[" + name + "]" + "\n"
 
     for item in target:
-        string += str(item) + " = " + str(myconfig.get(item)) + "\n"
+        string += str(item) + " = " + str(target.get(item)) + "\n"
 
     file = codecs.open(file, "w", "utf-8")
     file.write(string)
     file.close()
-    
