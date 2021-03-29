@@ -1,5 +1,6 @@
 import codecs
 
+string = ""
 
 def read(path):
     global file
@@ -60,9 +61,8 @@ def get(section, variable=0):
     except NameError:
         raise (Exception("No file loaded in memory. Use read() to read file"))
 
-    except KeyError as e:
-        print(e)
-        raise (Exception("Variable does not exist"))
+    except KeyError:
+        print("Variable " +  str(variable) + " in section " + section + " does not exist")
 
 
 def clear():
