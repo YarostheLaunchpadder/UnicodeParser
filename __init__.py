@@ -1,13 +1,16 @@
 import codecs
 
 string = ""
+fileloaded = False
 
 def read(path):
+    global string
     global file
     file = codecs.open(path, "r", "utf-8").read()
     global sectionlist
     global sectiondict
     global sectionnames
+    global fileloaded
     sectionlist = []
     sectionnames = []
     linelist = file.split("\n")
@@ -16,7 +19,6 @@ def read(path):
 
     while ' ' in linelist:
         linelist.remove(' ')
-
     for line in linelist:
         if "[" in line and "]" in line and not "=" in line:
             try:
@@ -33,10 +35,17 @@ def read(path):
             line = line.replace(" =", "=")
             sectiondict[line.split('=')[0]] = line.split('=')[1]
 
+
     try:
-        sectionlist.append(sectiondict)
+        if not fileloaded:
+            sectionlist.append(sectiondict)
     except:
         pass
+
+    if fileloaded:
+        sectionlist.insert(len(sectionlist),sectionlist.pop(0))
+    fileloaded = True
+
 
 
 def items(section):
